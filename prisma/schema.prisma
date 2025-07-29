@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String      @id
+  emailAddress String      @unique
+  firstName    String?
+  lastName     String?
+  imageUrl     String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  skillGoals   SkillGoal[]
+}
+
+model SkillGoal {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  userId      String
+  deadline    DateTime?
+  user        User      @relation(fields: [userId], references: [id])
+  topics      Topic[]   @relation("SkillGoalTopics")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Topic {
+  id          String     @id @default(uuid())
+  name        String
+  skillGoalId String
+  skillGoal   SkillGoal  @relation(fields: [skillGoalId], references: [id], name: "SkillGoalTopics", onDelete: Cascade)
+  subtopics   Subtopic[]
+}
+
+model Subtopic {
+  id          String       @id @default(uuid())
+  name        String
+  topicId     String
+  topic       Topic        @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  completions Completion[]
+}
+
+model Completion {
+  id         String   @id @default(uuid())
+  userId     String
+  subtopicId String
+  subtopic   Subtopic @relation(fields: [subtopicId], references: [id], onDelete: Cascade) // ✅ correct placement
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, subtopicId])
+}
