@@ -1,8 +1,16 @@
 import { getSkillGoalById } from "@/actions/get-skill-goal-by-id";
 import EditSkillGoalForm from "./_components/edit-skill-goal-form";
 
-export default async function EditPage({ params }: { params: { id: string } }) {
-  const goal = await getSkillGoalById(params.id);
+// Define the type for the params prop as a Promise
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function EditPage({ params }: PageProps) {
+  // Await the params to get the actual object
+  const { id } = await params;
+  
+  const goal = await getSkillGoalById(id);
 
   if (!goal) {
     return (

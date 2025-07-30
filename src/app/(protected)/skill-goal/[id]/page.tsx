@@ -1,12 +1,15 @@
 import { getSkillGoalById } from "@/actions/get-skill-goal-by-id";
 import SkillGoalDetail from "./_components/skill-goal-detail";
 
-export default async function SkillGoalPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const goal = await getSkillGoalById(params.id);
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function SkillGoalPage({ params }: PageProps) {
+
+  const { id } = await params;
+
+  const goal = await getSkillGoalById(id);
 
   if (!goal) {
     return (
