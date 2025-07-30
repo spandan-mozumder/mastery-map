@@ -24,12 +24,12 @@ export default function DashboardHeader() {
         <Button
           variant="outline"
           onClick={handleRefresh}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 cursor-pointer"
         >
           <RefreshCw className="h-4 w-4" />
           Refresh
         </Button>
-        <Button onClick={() => router.push("/create")}>
+        <Button onClick={() => router.push("/create")} className="cursor-pointer">
           + Create Skill Goal
         </Button>
         <SignedIn>

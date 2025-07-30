@@ -29,7 +29,7 @@ export default function HomePage() {
 
           <SignedOut>
             <Link href="/sign-up">
-              <Button variant="outline" className="font-semibold px-5 py-2">
+              <Button variant="outline" className="font-semibold px-5 py-2 cursor-pointer">
                 Sign Up
               </Button>
             </Link>
@@ -37,7 +37,7 @@ export default function HomePage() {
 
           <SignedOut>
             <Link href="/sign-in">
-              <Button variant="secondary" className="font-semibold px-5 py-2">
+              <Button variant="secondary" className="font-semibold px-5 py-2 cursor-pointer">
                 Sign In
               </Button>
             </Link>

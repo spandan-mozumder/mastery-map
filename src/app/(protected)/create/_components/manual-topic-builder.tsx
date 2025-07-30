@@ -91,16 +91,16 @@ export default function ManualTopicBuilder() {
               className="mb-1"
             />
           ))}
-          <Button variant="outline" size="sm" onClick={() => addSubtopic(i)}>
+          <Button variant="outline" size="sm" onClick={() => addSubtopic(i)} className="cursor-pointer">
             + Add Subtopic
           </Button>
         </div>
       ))}
       <div className="flex gap-2">
-        <Button variant="outline" onClick={addTopic}>
+        <Button variant="outline" onClick={addTopic} className="cursor-pointer">
           + Add Topic
         </Button>
-        <Button onClick={handleSave} disabled={isPending}>
+        <Button onClick={handleSave} disabled={isPending} className="cursor-pointer">
           {isPending ? "Saving..." : "Save Skill Goal"}
         </Button>
       </div>

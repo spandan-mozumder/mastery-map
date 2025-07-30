@@ -160,7 +160,7 @@ export default function AiEditableTopicBuilder() {
           Oops! Something went wrong.
         </h2>
         <p className="mb-4">{error}</p>
-        <Button onClick={() => window.location.reload()}>Try Again</Button>
+        <Button onClick={() => window.location.reload()} className="cursor-pointer">Try Again</Button>
       </div>
     );
   }
@@ -186,6 +186,7 @@ export default function AiEditableTopicBuilder() {
                 variant="ghost"
                 size="icon"
                 onClick={() => removeTopic(i)}
+                className="cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -202,6 +203,7 @@ export default function AiEditableTopicBuilder() {
                     variant="ghost"
                     size="icon"
                     onClick={() => removeSubtopic(i, j)}
+                    className="cursor-pointer"
                   >
                     <X className="h-4 w-4 text-muted-foreground" />
                   </Button>
@@ -211,6 +213,7 @@ export default function AiEditableTopicBuilder() {
                 variant="outline"
                 size="sm"
                 onClick={() => addSubtopic(i)}
+                className="cursor-pointer"
               >
                 + Add Subtopic
               </Button>
@@ -219,10 +222,10 @@ export default function AiEditableTopicBuilder() {
         ))}
       </div>
       <div className="flex gap-4 mt-6">
-        <Button variant="outline" onClick={addTopic}>
+        <Button variant="outline" onClick={addTopic} className="cursor-pointer">
           + Add Topic
         </Button>
-        <Button onClick={handleSave} disabled={isSaving}>
+        <Button onClick={handleSave} disabled={isSaving} className="cursor-pointer">
           {isSaving ? "Saving..." : "Create Skill Goal"}
         </Button>
       </div>

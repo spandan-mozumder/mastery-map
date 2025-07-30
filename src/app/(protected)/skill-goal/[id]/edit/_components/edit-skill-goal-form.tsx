@@ -138,7 +138,7 @@ export default function EditSkillGoalForm({ goal }: { goal: SkillGoal }) {
                 variant="ghost"
                 size="sm"
                 onClick={() => addSubtopic(i)}
-                className="text-xs ml-2"
+                className="text-xs ml-2 cursor-pointer"
               >
                 + Add Subtopic
               </Button>
@@ -149,10 +149,10 @@ export default function EditSkillGoalForm({ goal }: { goal: SkillGoal }) {
 
       {/* Footer Buttons */}
       <div className="flex flex-wrap gap-3 justify-end pt-4">
-        <Button variant="outline" onClick={addTopic}>
+        <Button variant="outline" onClick={addTopic} className="cursor-pointer">
           + Add Topic
         </Button>
-        <Button onClick={handleSave} disabled={isPending}>
+        <Button onClick={handleSave} disabled={isPending} className="cursor-pointer">
           {isPending ? "Saving..." : "Save Changes"}
         </Button>
       </div>
