@@ -84,9 +84,11 @@ export default function SkillGoalCard({ goal }: { goal: SkillGoal }) {
               <CardTitle className="text-lg leading-snug line-clamp-2">
                 {goal.title}
               </CardTitle>
-              <Badge variant={badgeVariant}>
-                {daysRemaining} day{daysRemaining !== 1 ? "s" : ""} left
-              </Badge>
+{goal.deadline && (
+  <Badge variant={badgeVariant}>
+    {daysRemaining} day{daysRemaining !== 1 ? "s" : ""} left
+  </Badge>
+)}
             </div>
           </CardHeader>
           <CardContent>
@@ -98,7 +100,6 @@ export default function SkillGoalCard({ goal }: { goal: SkillGoal }) {
         </Card>
       </Link>
 
-      {/* Edit Button */}
       <Link href={`/skill-goal/${goal.id}/edit`}>
         <Button
           size="icon"
@@ -109,7 +110,6 @@ export default function SkillGoalCard({ goal }: { goal: SkillGoal }) {
         </Button>
       </Link>
 
-      {/* Delete Button with AlertDialog */}
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button

@@ -62,7 +62,7 @@ export default function ManualTopicBuilder() {
       createSkillGoal(payload)
         .then(() => {
           toast.success("Skill goal created successfully!");
-          router.push("/create");
+          router.push("/dashboard");
         })
         .catch((err) => {
           console.error(err);

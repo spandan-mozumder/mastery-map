@@ -13,7 +13,7 @@ export default async function SkillGoalPage({ params }: PageProps) {
 
   if (!goal) {
     return (
-      <div className="max-w-xl mx-auto mt-10 px-4 text-center text-red-500">
+      <div className="max-w-xl mx-auto mt-20 px-4 text-center text-red-500">
         Skill goal not found.
       </div>
     );

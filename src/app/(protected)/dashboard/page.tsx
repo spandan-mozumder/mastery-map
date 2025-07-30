@@ -6,7 +6,7 @@ export default async function DashboardPage() {
   const skillGoals = await getUserSkillGoals();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-20">
       <DashboardHeader />
 
       <div className="mt-8 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

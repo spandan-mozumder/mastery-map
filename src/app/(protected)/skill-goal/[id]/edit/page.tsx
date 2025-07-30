@@ -1,20 +1,18 @@
 import { getSkillGoalById } from "@/actions/get-skill-goal-by-id";
 import EditSkillGoalForm from "./_components/edit-skill-goal-form";
 
-// Define the type for the params prop as a Promise
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export default async function EditPage({ params }: PageProps) {
-  // Await the params to get the actual object
   const { id } = await params;
   
   const goal = await getSkillGoalById(id);
 
   if (!goal) {
     return (
-      <div className="text-center text-red-500 mt-10">
+      <div className="text-center text-red-500 mt-20">
         Skill goal not found
       </div>
     );
@@ -26,7 +24,7 @@ export default async function EditPage({ params }: PageProps) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-20">
       <h1 className="text-3xl font-bold mb-6">Edit Skill Goal</h1>
       <EditSkillGoalForm goal={transformedGoal} />
     </div>
