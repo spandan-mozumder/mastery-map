@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useTransition, useState } from 'react';
-import { Progress } from '@/components/ui/progress';
-import { toggleCompletion } from '@/lib/toggle-completion';
-import { Checkbox } from '@/components/ui/checkbox';
-import { cn } from '@/lib/utils';
+import { useState, useTransition } from "react";
+import { Progress } from "@/components/ui/progress";
+import { toggleCompletion } from "@/actions/toggle-completion";
+import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 
 type Goal = {
   id: string;
@@ -16,7 +16,7 @@ type Goal = {
     subtopics: {
       id: string;
       name: string;
-      completions: { id: string }[]; // ✅ Match what Prisma returns
+      completions: { id: string }[];
     }[];
   }[];
 };
@@ -26,7 +26,9 @@ export default function SkillGoalDetail({ goal }: { goal: Goal }) {
   const [isPending, startTransition] = useTransition();
 
   const allSubtopics = localGoal.topics.flatMap((t) => t.subtopics);
-  const completedCount = allSubtopics.filter((s) => s.completions.length > 0).length;
+  const completedCount = allSubtopics.filter(
+    (s) => s.completions.length > 0
+  ).length;
   const totalCount = allSubtopics.length;
   const progress = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
@@ -43,7 +45,7 @@ export default function SkillGoalDetail({ goal }: { goal: Goal }) {
                     sub.id === subtopicId
                       ? {
                           ...sub,
-                          completions: completed ? [{ id: 'temp' }] : [],
+                          completions: completed ? [{ id: "temp" }] : [],
                         }
                       : sub
                   ),
@@ -57,46 +59,86 @@ export default function SkillGoalDetail({ goal }: { goal: Goal }) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2">{goal.title}</h1>
-      {goal.description && <p className="text-muted-foreground mb-4">{goal.description}</p>}
-      <Progress value={progress} className="h-2 mb-4" />
-      <p className="text-sm text-muted-foreground mb-6">{Math.round(progress)}% complete</p>
+      {/* Title & Description */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">{goal.title}</h1>
+        <p className="text-muted-foreground mt-2 text-base">
+          {goal.description || "No description provided."}
+        </p>
+      </div>
 
+      {/* Progress Bar */}
+      <div className="mb-6">
+        <Progress value={progress} className="h-3 rounded-full" />
+        <p className="text-sm text-muted-foreground mt-2">
+          {Math.round(progress)}% complete
+        </p>
+      </div>
+
+      {/* Topics */}
       <div className="space-y-6">
-        {localGoal.topics.map((topic) => (
-          <div key={topic.id}>
-            <div className="flex items-center gap-2">
-              <Checkbox
-                checked={topic.subtopics.every((s) => s.completions.length > 0)}
-                onCheckedChange={() => {
-                  topic.subtopics.forEach((sub) => handleToggle(topic.id, sub.id));
-                }}
-              />
-              <h2
-                className={cn(
-                  'text-lg font-semibold',
-                  topic.subtopics.every((s) => s.completions.length > 0) && 'line-through text-muted-foreground'
-                )}
-              >
-                {topic.name}
-              </h2>
-            </div>
+        {localGoal.topics.map((topic) => {
+          const topicCompleted = topic.subtopics.every(
+            (s) => s.completions.length > 0
+          );
 
-            <ul className="ml-6 mt-2 space-y-1">
-              {topic.subtopics.map((sub) => (
-                <li key={sub.id} className="flex items-center gap-2">
+          return (
+            <div
+              key={topic.id}
+              className="bg-card border border-border rounded-xl p-4 sm:p-6 shadow-sm transition"
+            >
+              {/* Topic Title */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
                   <Checkbox
-                    checked={sub.completions.length > 0}
-                    onCheckedChange={() => handleToggle(topic.id, sub.id)}
+                    checked={topicCompleted}
+                    onCheckedChange={() => {
+                      topic.subtopics.forEach((sub) =>
+                        handleToggle(topic.id, sub.id)
+                      );
+                    }}
+                    disabled={isPending}
                   />
-                  <span className={cn(sub.completions.length > 0 && 'line-through text-muted-foreground')}>
-                    {sub.name}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+                  <h2
+                    className={cn(
+                      "text-lg sm:text-xl font-semibold",
+                      topicCompleted && "line-through text-muted-foreground"
+                    )}
+                  >
+                    {topic.name}
+                  </h2>
+                </div>
+              </div>
+
+              {/* Subtopics */}
+              <ul className="space-y-3 ml-6">
+                {topic.subtopics.map((sub) => {
+                  const isComplete = sub.completions.length > 0;
+
+                  return (
+                    <li key={sub.id} className="flex items-center gap-3">
+                      <Checkbox
+                        checked={isComplete}
+                        onCheckedChange={() =>
+                          handleToggle(topic.id, sub.id)
+                        }
+                        disabled={isPending}
+                      />
+                      <span
+                        className={cn(
+                          "text-base",
+                          isComplete && "line-through text-muted-foreground"
+                        )}
+                      >
+                        {sub.name}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

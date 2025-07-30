@@ -1,14 +1,14 @@
-'use server';
+"use server";
 
-import { db } from './db';
-import { revalidatePath } from 'next/cache';
-import { z } from 'zod';
-import { auth } from '@clerk/nextjs/server';
+import { db } from "../lib/db";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { auth } from "@clerk/nextjs/server";
 
 const SkillGoalSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
-  deadline: z.date().optional(), 
+  deadline: z.date().optional(),
   topics: z.array(
     z.object({
       name: z.string().min(1),
@@ -21,13 +21,13 @@ export async function createSkillGoal(formData: any) {
   const { userId } = await auth();
 
   if (!userId) {
-    throw new Error('Unauthorized');
+    throw new Error("Unauthorized");
   }
 
   const parsed = SkillGoalSchema.safeParse(formData);
   if (!parsed.success) {
     console.error(parsed.error);
-    throw new Error('Invalid input');
+    throw new Error("Invalid input");
   }
 
   const { title, description, deadline, topics } = parsed.data;
@@ -49,6 +49,6 @@ export async function createSkillGoal(formData: any) {
     },
   });
 
-  revalidatePath('/dashboard'); // or wherever your skill goals are listed
+  revalidatePath("/dashboard"); // or wherever your skill goals are listed
   return newSkillGoal;
 }

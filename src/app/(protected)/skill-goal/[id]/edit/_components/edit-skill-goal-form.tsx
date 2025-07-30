@@ -6,13 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { updateSkillGoal } from "@/lib/update-skill-goal";
+import { updateSkillGoal } from "@/actions/update-skill-goal";
+import { Card } from "@/components/ui/card";
 
 type Subtopic = { name: string };
-type Topic = {
-  name: string;
-  subtopics: Subtopic[];
-};
+type Topic = { name: string; subtopics: Subtopic[] };
 
 interface SkillGoal {
   id: string;
@@ -32,12 +30,10 @@ export default function EditSkillGoalForm({ goal }: { goal: SkillGoal }) {
   const [description, setDescription] = useState(goal.description ?? "");
   const [deadline, setDeadline] = useState(goal.deadline ?? "");
   const [topics, setTopics] = useState<TopicInput[]>(
-    goal.topics.map(
-      (topic): TopicInput => ({
-        name: topic.name,
-        subtopics: topic.subtopics.map((sub): string => sub.name),
-      })
-    )
+    goal.topics.map((topic) => ({
+      name: topic.name,
+      subtopics: topic.subtopics.map((sub) => sub.name),
+    }))
   );
 
   const [isPending, startTransition] = useTransition();
@@ -56,7 +52,6 @@ export default function EditSkillGoalForm({ goal }: { goal: SkillGoal }) {
   };
 
   const addTopic = () => setTopics([...topics, { name: "", subtopics: [""] }]);
-
   const addSubtopic = (i: number) => {
     const newTopics = [...topics];
     newTopics[i].subtopics.push("");
@@ -94,54 +89,66 @@ export default function EditSkillGoalForm({ goal }: { goal: SkillGoal }) {
   };
 
   return (
-    <div className="space-y-4 max-w-2xl mx-auto p-4">
-      <h2 className="text-2xl font-semibold mb-2">Edit Skill Goal</h2>
+    <div className="space-y-6">
+      {/* Title, Description, Deadline */}
+      <div className="grid gap-4">
+        <Input
+          placeholder="Skill Goal Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-      <Input
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+        <Textarea
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
 
-      <Textarea
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+        <Input
+          type="date"
+          value={deadline ?? ""}
+          onChange={(e) => setDeadline(e.target.value)}
+        />
+      </div>
 
-      <Input
-        type="date"
-        value={deadline ?? ""}
-        onChange={(e) => setDeadline(e.target.value)}
-      />
-
-      {topics.map((topic, i) => (
-        <div key={i} className="border rounded p-4 space-y-2">
-          <Input
-            placeholder={`Topic ${i + 1}`}
-            value={topic.name}
-            onChange={(e) => updateTopicName(i, e.target.value)}
-          />
-          {topic.subtopics.map((sub, j) => (
+      {/* Topics & Subtopics */}
+      <div className="space-y-6">
+        {topics.map((topic, i) => (
+          <Card key={i} className="p-4 space-y-4">
+            {/* Topic */}
             <Input
-              key={j}
-              placeholder={`Subtopic ${j + 1}`}
-              value={sub}
-              onChange={(e) => updateSubtopic(i, j, e.target.value)}
+              className="text-large font-medium"
+              placeholder="Topic"
+              value={topic.name}
+              onChange={(e) => updateTopicName(i, e.target.value)}
             />
-          ))}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => addSubtopic(i)}
-            className="mt-1"
-          >
-            + Add Subtopic
-          </Button>
-        </div>
-      ))}
 
-      <div className="flex gap-2">
+            <div className="pl-2 border-l-2 border-muted/30 space-y-2">
+              {topic.subtopics.map((sub, j) => (
+                <Input
+                  key={j}
+                  className="text-sm"
+                  placeholder="Subtopic"
+                  value={sub}
+                  onChange={(e) => updateSubtopic(i, j, e.target.value)}
+                />
+              ))}
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => addSubtopic(i)}
+                className="text-xs ml-2"
+              >
+                + Add Subtopic
+              </Button>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {/* Footer Buttons */}
+      <div className="flex flex-wrap gap-3 justify-end pt-4">
         <Button variant="outline" onClick={addTopic}>
           + Add Topic
         </Button>

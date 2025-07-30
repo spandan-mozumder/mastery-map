@@ -1,21 +1,23 @@
-import { getSkillGoalById } from "@/lib/get-skill-goal-by-id";
+import { getSkillGoalById } from "@/actions/get-skill-goal-by-id";
 import SkillGoalDetail from "./_components/skill-goal-detail";
 
-export default async function SkillGoalPage(context: {
+export default async function SkillGoalPage({
+  params,
+}: {
   params: { id: string };
 }) {
-  const { params } = context;
-
   const goal = await getSkillGoalById(params.id);
 
   if (!goal) {
     return (
-      <p className="text-center mt-10 text-red-500">Skill goal not found.</p>
+      <div className="max-w-xl mx-auto mt-10 px-4 text-center text-red-500">
+        Skill goal not found.
+      </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <SkillGoalDetail goal={goal} />
     </div>
   );

@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useTransition } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
-import { createSkillGoal } from '@/lib/create-skill-goal';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useTransition } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { createSkillGoal } from "@/actions/create-skill-goal";
+import { useRouter } from "next/navigation";
 
 export default function ManualTopicBuilder() {
   const [savedGoal, setSavedGoal] = useState<{
     title: string;
     description?: string;
     deadline?: string;
-  }>({ title: '', description: '', deadline: '' });
+  }>({ title: "", description: "", deadline: "" });
 
-  const [topics, setTopics] = useState([{ name: '', subtopics: [''] }]);
+  const [topics, setTopics] = useState([{ name: "", subtopics: [""] }]);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   useEffect(() => {
-    const goal = localStorage.getItem('skillGoal');
+    const goal = localStorage.getItem("skillGoal");
     if (goal) {
       setSavedGoal(JSON.parse(goal));
     }
@@ -37,17 +37,17 @@ export default function ManualTopicBuilder() {
     setTopics(newTopics);
   };
 
-  const addTopic = () => setTopics([...topics, { name: '', subtopics: [''] }]);
+  const addTopic = () => setTopics([...topics, { name: "", subtopics: [""] }]);
 
   const addSubtopic = (i: number) => {
     const newTopics = [...topics];
-    newTopics[i].subtopics.push('');
+    newTopics[i].subtopics.push("");
     setTopics(newTopics);
   };
 
   const handleSave = () => {
     if (!savedGoal.title) {
-      toast.error('Missing skill goal data.');
+      toast.error("Missing skill goal data.");
       return;
     }
 
@@ -61,12 +61,12 @@ export default function ManualTopicBuilder() {
     startTransition(() => {
       createSkillGoal(payload)
         .then(() => {
-          toast.success('Skill goal created successfully!');
-          router.push('/create');
+          toast.success("Skill goal created successfully!");
+          router.push("/create");
         })
         .catch((err) => {
           console.error(err);
-          toast.error('Failed to save skill goal.');
+          toast.error("Failed to save skill goal.");
         });
     });
   };
@@ -101,7 +101,7 @@ export default function ManualTopicBuilder() {
           + Add Topic
         </Button>
         <Button onClick={handleSave} disabled={isPending}>
-          {isPending ? 'Saving...' : 'Save Skill Goal'}
+          {isPending ? "Saving..." : "Save Skill Goal"}
         </Button>
       </div>
     </div>

@@ -1,4 +1,3 @@
-// lib/get-user-skill-goals.ts
 'use server';
 
 import { db } from '@/lib/db';
@@ -10,13 +9,16 @@ export async function getUserSkillGoals() {
 
   return db.skillGoal.findMany({
     where: { userId },
+    orderBy: {
+      deadline: 'asc',
+    },
     include: {
       topics: {
         include: {
           subtopics: {
             include: {
               completions: {
-                where: { userId }, 
+                where: { userId },
               },
             },
           },
