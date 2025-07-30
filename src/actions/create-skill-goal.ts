@@ -17,7 +17,9 @@ const SkillGoalSchema = z.object({
   ),
 });
 
-export async function createSkillGoal(formData: any) {
+type SkillGoalInput = z.infer<typeof SkillGoalSchema>;
+
+export async function createSkillGoal(formData: SkillGoalInput) {
   const { userId } = await auth();
 
   if (!userId) {

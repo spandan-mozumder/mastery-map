@@ -169,8 +169,8 @@ export default function AiEditableTopicBuilder() {
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-2">Review Your AI-Generated Plan</h1>
       <p className="text-muted-foreground mb-6">
-        Here's a starting point for "{savedGoal.title}". Feel free to edit, add,
-        or remove anything before saving.
+        Here&apos;s a starting point for &quot;{savedGoal.title}&quot;. Feel free to edit, add,
+  or remove anything before saving.
       </p>
       <div className="space-y-4">
         {topics.map((topic, i) => (
