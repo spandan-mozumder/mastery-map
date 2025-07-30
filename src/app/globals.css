@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+:root {
+  --font-ubuntu-mono: 'Ubuntu Mono', monospace;
+}
+
+body {
+  font-family: var(--font-ubuntu-mono);
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
