@@ -21,10 +21,13 @@ type SkillGoalInput = z.infer<typeof SkillGoalSchema>;
 
 export async function createSkillGoal(formData: SkillGoalInput) {
   const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
 
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
+  // Sanitize subtopics
+  formData.topics = formData.topics.map((topic) => ({
+    ...topic,
+    subtopics: topic.subtopics.filter((sub) => sub.trim().length > 0),
+  }));
 
   const parsed = SkillGoalSchema.safeParse(formData);
   if (!parsed.success) {
@@ -39,7 +42,7 @@ export async function createSkillGoal(formData: SkillGoalInput) {
       title,
       description,
       userId,
-      deadline: deadline ? new Date(deadline) : undefined, // ✅ Parse date string
+      deadline: deadline ? new Date(deadline) : undefined,
       topics: {
         create: topics.map((topic) => ({
           name: topic.name,
@@ -51,6 +54,7 @@ export async function createSkillGoal(formData: SkillGoalInput) {
     },
   });
 
-  revalidatePath("/dashboard"); // or wherever your skill goals are listed
+  revalidatePath("/dashboard");
   return newSkillGoal;
 }
+
